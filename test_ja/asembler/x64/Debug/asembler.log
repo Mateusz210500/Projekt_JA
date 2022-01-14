@@ -1,0 +1,4 @@
+﻿  Assembling MASM.asm...
+MASM.asm(2): error A2008: syntax error : .
+MASM.asm(18): warning A6004: procedure argument or local not referenced : z
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\BuildCustomizations\masm.targets(70,5): error MSB3721: Polecenie ml64.exe /c /nologo /Zi /Fo"x64\Debug\MASM.obj" /W3 /errorReport:prompt  /TaMASM.asm zostało zakończone; kod błędu: 1.

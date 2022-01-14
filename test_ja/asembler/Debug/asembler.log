@@ -1,0 +1,3 @@
+﻿  Assembling MASM.asm...
+MASM.asm(17): warning A6004: procedure argument or local not referenced : z
+  asembler.vcxproj -> C:\Users\mateu\Desktop\STUDIA\PRZEDMIOTY\JA\test_ja\Debug\asembler.lib
