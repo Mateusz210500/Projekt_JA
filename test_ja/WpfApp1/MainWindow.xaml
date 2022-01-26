@@ -9,10 +9,10 @@
     <StackPanel>
         <Button Name="btnLoadFromFile" Click="BtnLoadFromFile_Click" Margin="10" HorizontalAlignment="Center" Width="111">Load from File...</Button>
         <WrapPanel Margin="10" HorizontalAlignment="Center" RenderTransformOrigin="0.342,0.5">
-            <Image Source="./Images/images.png" x:Name="imgDynamic" Margin="10" Width="300px " RenderTransformOrigin="-0.198,0.487" />
+            <Image Source="./Images/images.png" x:Name="imgDynamic" Margin="10" Width="300px " />
             <Image Source="./Images/images.png" x:Name="imgDynamic2" Margin="10" Width="300px "/>
         </WrapPanel>
-        <WrapPanel>
+        <WrapPanel HorizontalAlignment="Center">
             <Button Name="btnApplyFilter" Click="BtnApplyFilter_Click" HorizontalAlignment="Center" VerticalAlignment="bottom" RenderTransformOrigin="0.5,1.4" Margin="365,0,354,0" Width="75">Apply Filter</Button>
             <Button x:Name="btnApplyFilter_Copy" Click="BtnMASM_Click" HorizontalAlignment="Center" VerticalAlignment="bottom" RenderTransformOrigin="0.5,1.4" Margin="365,10,354,0" Width="75" Content="MASM"/>
         </WrapPanel>

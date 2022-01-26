@@ -1,4 +1,6 @@
 ﻿  Assembling MASM.asm...
-MASM.asm(2): error A2008: syntax error : .
-MASM.asm(18): warning A6004: procedure argument or local not referenced : z
-C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\BuildCustomizations\masm.targets(70,5): error MSB3721: Polecenie ml64.exe /c /nologo /Zi /Fo"x64\Debug\MASM.obj" /W3 /errorReport:prompt  /TaMASM.asm zostało zakończone; kod błędu: 1.
+MASM.asm(21): warning A6004: procedure argument or local not referenced : x
+MASM.asm(21): warning A6004: procedure argument or local not referenced : y
+MASM.asm(21): warning A6004: procedure argument or local not referenced : z
+     Trwa tworzenie biblioteki C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Debug\asembler.lib i obiektu C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Debug\asembler.exp
+  asembler.vcxproj -> C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Debug\asembler.dll

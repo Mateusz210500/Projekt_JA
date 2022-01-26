@@ -1,20 +1,22 @@
-;-------------------------------------------------------------------------
-.MODEL FLAT, STDCALL 
-
-.DATA 
-sum REAL4 ? 
 .CODE 
-;-------------------------------------------------------------------------
 
 
-;-------------------------------------------------------------------------
-MyProc1 proc x: DWORD, y: DWORD, z: DWORD
-mov eax, x 
-mov ebx, y 
-SUB EDX, EDX
-div ebx
-mov sum, eax 
-ret
-MyProc1 endp 
+Adding proc x: PTR REAL8, y: REAL8, z: PTR REAL8
+
+
+        VBROADCASTSD YMM0, XMM1
+        VMULPD  YMM1, YMM0, YMMWORD PTR [RCX]
+        VMOVUPD YMMWORD PTR [R8], YMM1
+        VMULPD  YMM1, YMM0, YMMWORD PTR [RCX + 32]
+        VMOVUPD YMMWORD PTR [R8 + 32], YMM1
+        VMULPD  YMM1, YMM0, YMMWORD PTR [RCX + 64]
+        VMOVUPD YMMWORD PTR [R8 + 64], YMM1
+        VMULPD  YMM0, YMM0, YMMWORD PTR [RCX + 96]
+        VMOVUPD YMMWORD PTR [R8 + 96], YMM0
+        vzeroupper
+
+
+RET
+
+Adding endp 
 END 
-;-------------------------------------------------------------------------

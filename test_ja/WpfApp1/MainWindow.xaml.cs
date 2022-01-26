@@ -76,6 +76,31 @@ namespace WpfApp1
             
         }
 
+        private static double[] MatrixToArray(double[,] prop)
+        {
+            double[] result = new double[prop.Length];
+            int index = 0;
+
+            for (var i = 0; i <= prop.GetUpperBound(0); i++)
+            {
+                for (var j = 0; j <= prop.GetUpperBound(1); j++)
+                    result[index++] = prop[i, j];
+            }
+
+            return result;
+        }
+        static double[,] ArrayToMatrix(double[] flat, int m, int n)
+        {
+            if (flat.Length != m * n)
+            {
+                throw new ArgumentException("Invalid length");
+            }
+            double[,] ret = new double[m, n];
+            // BlockCopy uses byte lengths: a double is 8 bytes
+            Buffer.BlockCopy(flat, 0, ret, 0, flat.Length * sizeof(double));
+            return ret;
+        }
+
         //private static Bitmap Blur(Bitmap image, int blurSize)
         //{
         //    Bitmap blurred = new Bitmap(image.Width, image.Height);
@@ -102,11 +127,16 @@ namespace WpfApp1
         //    return blurred;
         //}
 
-        public static double[,] GaussianBlur(int lenght, int weight)
+        private static int Adding(double[] a, double b, double[] c)
         {
-            double[,] kernel = new double[lenght, lenght];
+            return MasmConnector.Adding(a, b, c);
+        }
+
+        public static double[,] GaussianBlur(int length, int weight)
+        {
+            double[,] kernel = new double[length, length];
             double kernelSum = 0;
-            int foff = (lenght - 1) / 2;
+            int foff = (length - 1) / 2;
             double distance = 0;
             double constant = 1d / (2 * Math.PI * weight * weight);
             for (int y = -foff; y <= foff; y++)
@@ -118,14 +148,21 @@ namespace WpfApp1
                     kernelSum += kernel[y + foff, x + foff];
                 }
             }
-            for (int y = 0; y < lenght; y++)
-            {
-                for (int x = 0; x < lenght; x++)
-                {
-                    kernel[y, x] = kernel[y, x] * 1d / kernelSum;
-                }
-            }
-            return kernel;
+            //for (int y = 0; y < length; y++)
+            //{
+            //    for (int x = 0; x < length; x++)
+            //    {
+            //        kernel[y, x] = kernel[y, x] * 1d / kernelSum;
+            //    }
+            //}
+
+            double[] kernel2 = MatrixToArray(kernel);
+            double[] kernel3 = new double[length * length];
+            double B = 1d / kernelSum;
+            Adding(kernel2, B, kernel3);
+            Console.WriteLine(kernel3.Sum());
+            double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
+            return kernel4;
         }
 
         public static Bitmap Convolve(Bitmap srcImage, double[,] kernel)
@@ -194,7 +231,7 @@ namespace WpfApp1
         {
             Bitmap bitmap;
             bitmap = BitmapImagetoBitmap(bitmapImage);
-            double[,] kernel = GaussianBlur(10, 40);
+            double[,] kernel = GaussianBlur(4, 10);
             bitmap = Convolve(bitmap, kernel);
             BitmapImage bitmap2 = BitmapToBitmapImage(bitmap);
             imgDynamic2.Source = bitmap2;
@@ -202,7 +239,16 @@ namespace WpfApp1
 
         private void BtnMASM_Click(object sender, RoutedEventArgs e)
         {
-            text1.Content = Class1.adding(8, 5, 6);
+            //double[] kernel3 = new double[];
+            //double B = 1d / kernelSum;
+            //Adding(kernel2, B, kernel3);
+            //Console.WriteLine(kernel3.Sum());
+            //double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
+
+            double[] a = new double[16] { 0, 7, 2, 3, 0, 1, 2, 3, 0, 1, 2, 8, 0, 1, 2, 3 };
+            double[] b = new double[16];
+            MasmConnector.Adding(a, 5.0, b);
+            text1.Content = b.Sum();
         }
     }
 
