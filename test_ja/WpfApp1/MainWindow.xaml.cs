@@ -89,7 +89,7 @@ namespace WpfApp1
 
             return result;
         }
-        static double[,] ArrayToMatrix(double[] flat, int m, int n)
+        private static double[,] ArrayToMatrix(double[] flat, int m, int n)
         {
             if (flat.Length != m * n)
             {
@@ -99,6 +99,14 @@ namespace WpfApp1
             // BlockCopy uses byte lengths: a double is 8 bytes
             Buffer.BlockCopy(flat, 0, ret, 0, flat.Length * sizeof(double));
             return ret;
+        }
+
+        private static double[] ConnectArrays(double[] first, double[] second)
+        {
+            double[] arr3 = new double[first.Length + second.Length];
+            Array.Copy(first, arr3, first.Length);
+            Array.Copy(second, 0, arr3, first.Length, second.Length);
+            return arr3;
         }
 
         //private static Bitmap Blur(Bitmap image, int blurSize)
@@ -156,12 +164,32 @@ namespace WpfApp1
             //    }
             //}
 
+            //double[] kernel2 = MatrixToArray(kernel);
+            //double[] kernel3 = new double[16];
+            //double[] temp;
+            //double B = 1d / kernelSum;
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    temp = kernel2.Skip(i * 4).Take(16).ToArray();
+            //    Adding(temp, B, kernel3);
+            //    kernel3 = ConnectArrays(kernel3, temp);
+            //}
+            //Adding(kernel2, B, kernel3);
+
             double[] kernel2 = MatrixToArray(kernel);
-            double[] kernel3 = new double[length * length];
+            double[] kernel3 = new double[0];
+            double[] kernel5 = new double[16];
             double B = 1d / kernelSum;
-            Adding(kernel2, B, kernel3);
-            Console.WriteLine(kernel3.Sum());
+            for (int i = 0; i < 4; i++)
+            {
+                double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
+                Adding(temp, B, kernel5);
+                kernel3 = ConnectArrays(kernel3, kernel5);
+            }
+
             double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
+
+
             return kernel4;
         }
 
@@ -231,7 +259,7 @@ namespace WpfApp1
         {
             Bitmap bitmap;
             bitmap = BitmapImagetoBitmap(bitmapImage);
-            double[,] kernel = GaussianBlur(4, 10);
+            double[,] kernel = GaussianBlur(8, 10);
             bitmap = Convolve(bitmap, kernel);
             BitmapImage bitmap2 = BitmapToBitmapImage(bitmap);
             imgDynamic2.Source = bitmap2;
@@ -239,16 +267,26 @@ namespace WpfApp1
 
         private void BtnMASM_Click(object sender, RoutedEventArgs e)
         {
-            //double[] kernel3 = new double[];
-            //double B = 1d / kernelSum;
-            //Adding(kernel2, B, kernel3);
-            //Console.WriteLine(kernel3.Sum());
-            //double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
 
-            double[] a = new double[16] { 0, 7, 2, 3, 0, 1, 2, 3, 0, 1, 2, 8, 0, 1, 2, 3 };
-            double[] b = new double[16];
-            MasmConnector.Adding(a, 5.0, b);
-            text1.Content = b.Sum();
+            //double[] a = new double[16] { 0, 7, 2, 3, 0, 1, 2, 3, 0, 1, 2, 8, 0, 1, 2, 3 };
+            //double[] b = new double[16];
+            //MasmConnector.Adding(a, 5.0, b);
+            //text1.Content = b.Sum();
+
+            //double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
+            double[] kernel3 = new double[0];
+            double[] kernel4 = new double[16];
+            double B = 4;
+            for (int i = 0; i < 4; i++)
+            {
+                double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
+                Adding(temp, B, kernel4);
+                kernel3 = ConnectArrays(kernel3, kernel4);
+            }
+
+
+            text1.Content = 5;
         }
     }
 
