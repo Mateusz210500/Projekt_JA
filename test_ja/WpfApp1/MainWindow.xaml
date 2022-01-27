@@ -5,17 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
+        Title="MainWindow" Height="700" Width="800">
     <StackPanel>
         <Button Name="btnLoadFromFile" Click="BtnLoadFromFile_Click" Margin="10" HorizontalAlignment="Center" Width="111">Load from File...</Button>
         <WrapPanel Margin="10" HorizontalAlignment="Center" RenderTransformOrigin="0.342,0.5">
             <Image Source="./Images/images.png" x:Name="imgDynamic" Margin="10" Width="300px " />
             <Image Source="./Images/images.png" x:Name="imgDynamic2" Margin="10" Width="300px "/>
         </WrapPanel>
+        <WrapPanel Orientation="Vertical">
+            <DockPanel VerticalAlignment="Center" Margin="10">
+                <TextBox Text="{Binding ElementName=slValue, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Minimum="1" Maximum="10" TickPlacement="BottomRight" TickFrequency="1" IsSnapToTickEnabled="True" Name="slValue" Width="283" ValueChanged="ColorSlider_ValueChanged"/>
+            </DockPanel>
+            <CheckBox Name="masmClick" Checked="masmOnChange" Unchecked="masmOnChange" RenderTransformOrigin="0.598,0.533" Width="317">Użycie masm</CheckBox>
+        </WrapPanel>
         <WrapPanel HorizontalAlignment="Center">
-            <Button Name="btnApplyFilter" Click="BtnApplyFilter_Click" HorizontalAlignment="Center" VerticalAlignment="bottom" RenderTransformOrigin="0.5,1.4" Margin="365,0,354,0" Width="75">Apply Filter</Button>
+            <Button x:Name="btnApplyFilter" Click="BtnApplyFilter_Click" HorizontalAlignment="Center" VerticalAlignment="bottom" RenderTransformOrigin="0.5,1.4" Margin="365,0,354,0" Width="75" Content="Apply Filter"/>
             <Button x:Name="btnApplyFilter_Copy" Click="BtnMASM_Click" HorizontalAlignment="Center" VerticalAlignment="bottom" RenderTransformOrigin="0.5,1.4" Margin="365,10,354,0" Width="75" Content="MASM"/>
         </WrapPanel>
-            <Label x:Name="text1" Content="wynik"  HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
+        <Label x:Name="text1" Content="wynik"  HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
     </StackPanel>
 </Window>

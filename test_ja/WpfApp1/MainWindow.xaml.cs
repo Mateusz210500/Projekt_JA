@@ -30,6 +30,8 @@ namespace WpfApp1
         {
             InitializeComponent();
         }
+        private int blurLength = 0;
+        private Boolean masmOn = false;
 
         BitmapImage bitmapImage;
         private void BtnLoadFromFile_Click(object sender, RoutedEventArgs e)
@@ -109,39 +111,14 @@ namespace WpfApp1
             return arr3;
         }
 
-        //private static Bitmap Blur(Bitmap image, int blurSize)
-        //{
-        //    Bitmap blurred = new Bitmap(image.Width, image.Height);
-        //    for (int x = blurSize; x < image.Width - blurSize; x++)
-        //    {
-        //        for(int y = blurSize; y < image.Height - blurSize; y++)
-        //        {
-        //            try
-        //            {
-        //                System.Drawing.Color prevX = image.GetPixel(x - blurSize, y);
-        //                System.Drawing.Color nextX = image.GetPixel(x + 1, y);
-        //                System.Drawing.Color prevy = image.GetPixel(x, y - 1);
-        //                System.Drawing.Color nextY = image.GetPixel(x, y + 1);
-
-        //                int avgR = (int)((prevX.R + nextX.R + prevy.R + nextY.R) / 4);
-        //                int avgG = (int)((prevX.G + nextX.G + prevy.G + nextY.G) / 4);
-        //                int avgB = (int)((prevX.B + nextX.B + prevy.B + nextY.B) / 4);
-
-        //                blurred.SetPixel(x, y, System.Drawing.Color.FromArgb(avgR, avgG, avgB));
-        //            }
-        //            catch (Exception) { }
-        //        }
-        //    }
-        //    return blurred;
-        //}
-
         private static int Adding(double[] a, double b, double[] c)
         {
             return MasmConnector.Adding(a, b, c);
         }
 
-        public static double[,] GaussianBlur(int length, int weight)
+        public static double[,] GaussianBlur(int length, int weight, Boolean masm)
         {
+            length = length * 4;
             double[,] kernel = new double[length, length];
             double kernelSum = 0;
             int foff = (length - 1) / 2;
@@ -156,41 +133,36 @@ namespace WpfApp1
                     kernelSum += kernel[y + foff, x + foff];
                 }
             }
-            //for (int y = 0; y < length; y++)
-            //{
-            //    for (int x = 0; x < length; x++)
-            //    {
-            //        kernel[y, x] = kernel[y, x] * 1d / kernelSum;
-            //    }
-            //}
-
-            //double[] kernel2 = MatrixToArray(kernel);
-            //double[] kernel3 = new double[16];
-            //double[] temp;
-            //double B = 1d / kernelSum;
-            //for (int i = 0; i < 3; i++)
-            //{
-            //    temp = kernel2.Skip(i * 4).Take(16).ToArray();
-            //    Adding(temp, B, kernel3);
-            //    kernel3 = ConnectArrays(kernel3, temp);
-            //}
-            //Adding(kernel2, B, kernel3);
-
-            double[] kernel2 = MatrixToArray(kernel);
-            double[] kernel3 = new double[0];
-            double[] kernel5 = new double[16];
-            double B = 1d / kernelSum;
-            for (int i = 0; i < 4; i++)
+            switch (masm)
             {
-                double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
-                Adding(temp, B, kernel5);
-                kernel3 = ConnectArrays(kernel3, kernel5);
+                case false:
+                    for (int y = 0; y < length; y++)
+                    {
+                        for (int x = 0; x < length; x++)
+                        {
+                            kernel[y, x] = kernel[y, x] * 1d / kernelSum;
+                        }
+                    }
+                    Console.WriteLine("c#");
+                    return kernel;
+                break;
+
+                default:
+                    double[] kernel2 = MatrixToArray(kernel);
+                    double[] kernel3 = new double[0];
+                    double[] kernel5 = new double[16];
+                    double B = 1d / kernelSum;
+                    for (int i = 0; i < length*length/16; i++)
+                    {
+                        double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
+                        Adding(temp, B, kernel5);
+                        kernel3 = ConnectArrays(kernel3, kernel5);
+                    }
+                    double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
+                    Console.WriteLine("masm");
+                    return kernel4;
+                break;
             }
-
-            double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
-
-
-            return kernel4;
         }
 
         public static Bitmap Convolve(Bitmap srcImage, double[,] kernel)
@@ -259,19 +231,24 @@ namespace WpfApp1
         {
             Bitmap bitmap;
             bitmap = BitmapImagetoBitmap(bitmapImage);
-            double[,] kernel = GaussianBlur(8, 10);
+            double[,] kernel = GaussianBlur(blurLength, 10, masmOn);
             bitmap = Convolve(bitmap, kernel);
             BitmapImage bitmap2 = BitmapToBitmapImage(bitmap);
             imgDynamic2.Source = bitmap2;
         }
 
+        private void ColorSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		{
+            blurLength = (int)slValue.Value;
+        }
+
+        private void masmOnChange(object sender, RoutedEventArgs e)
+        {
+            masmOn = masmClick.IsChecked == true;
+        }
+
         private void BtnMASM_Click(object sender, RoutedEventArgs e)
         {
-
-            //double[] a = new double[16] { 0, 7, 2, 3, 0, 1, 2, 3, 0, 1, 2, 8, 0, 1, 2, 3 };
-            //double[] b = new double[16];
-            //MasmConnector.Adding(a, 5.0, b);
-            //text1.Content = b.Sum();
 
             //double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
