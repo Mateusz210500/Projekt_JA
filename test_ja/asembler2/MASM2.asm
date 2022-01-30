@@ -3,16 +3,15 @@ dividend  DWORD ?
 divisor  DWORD ?
 .CODE 
 
-Blur proc x: DWORD, y: DWORD, z: DWORD 
-mov eax, ECX 
-imul eax, eax
-mov dividend, eax
+Blur proc
+imul ecx, ecx
+mov dividend, ecx
 mov eax, 0
-mov eax, EDX 
-imul eax, eax
-mov ecx, 10000
-mul ecx
-add dividend, eax 
+imul edx, edx
+add dividend, edx 
+mov eax, dividend
+imul eax, 100
+mov dividend, eax
 mov eax, 0
 
 mov eax, ebx

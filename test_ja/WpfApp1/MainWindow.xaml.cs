@@ -132,7 +132,9 @@ namespace WpfApp1
             {
                 for (int x = -foff; x <= foff; x++)
                 {
-                    distance = ((y * y) + (x * x)) / (2 * weight * weight);
+                    //distance = ((y * y) + (x * x)) / (2 * weight * weight);
+                    int temp = Blur(y, x, weight);
+                    distance = (double)temp / 100;
                     kernel[y + foff, x + foff] = constant * Math.Exp(-distance);
                     kernelSum += kernel[y + foff, x + foff];
                 }
@@ -266,11 +268,12 @@ namespace WpfApp1
             //    kernel3 = ConnectArrays(kernel3, kernel4);
             //}
             int a = 5;
-            int b = 3;
-            int c = 7;
+            int b = 5;
+            int c = 16;
 
             int temp = Blur(a, b, c);
-            text1.Content = temp;
+            double ret = (double)temp / 100;
+            text1.Content = ret;
         }
     }
 

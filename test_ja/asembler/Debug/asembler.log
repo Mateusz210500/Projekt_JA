@@ -1,3 +1,16 @@
 ﻿  Assembling MASM.asm...
-MASM.asm(17): warning A6004: procedure argument or local not referenced : z
-  asembler.vcxproj -> C:\Users\mateu\Desktop\STUDIA\PRZEDMIOTY\JA\test_ja\Debug\asembler.lib
+MASM.asm(1): error A2013: .MODEL must precede this directive
+MASM.asm(4): error A2034: must be in segment block : Multiply
+MASM.asm(7): error A2034: must be in segment block
+MASM.asm(8): error A2034: must be in segment block
+MASM.asm(9): error A2034: must be in segment block
+MASM.asm(10): error A2034: must be in segment block
+MASM.asm(11): error A2034: must be in segment block
+MASM.asm(12): error A2034: must be in segment block
+MASM.asm(13): error A2034: must be in segment block
+MASM.asm(14): error A2034: must be in segment block
+MASM.asm(15): error A2034: must be in segment block
+MASM.asm(16): error A2034: must be in segment block
+MASM.asm(19): error A2034: must be in segment block
+MASM.asm(21): fatal error A1010: unmatched block nesting : Multiply
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\BuildCustomizations\masm.targets(70,5): error MSB3721: Polecenie ml.exe /c /nologo /Zi /Fo"Debug\MASM.obj" /W3 /errorReport:prompt  /TaMASM.asm zostało zakończone; kod błędu: 1.

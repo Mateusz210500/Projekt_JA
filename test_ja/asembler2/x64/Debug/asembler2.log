@@ -1,6 +1,3 @@
 ﻿  Assembling MASM2.asm...
-MASM2.asm(29): warning A6004: procedure argument or local not referenced : x
-MASM2.asm(29): warning A6004: procedure argument or local not referenced : y
-MASM2.asm(29): warning A6004: procedure argument or local not referenced : z
      Trwa tworzenie biblioteki C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Debug\asembler2.lib i obiektu C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Debug\asembler2.exp
   asembler2.vcxproj -> C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Debug\asembler2.dll
