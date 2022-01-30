@@ -98,7 +98,6 @@ namespace WpfApp1
                 throw new ArgumentException("Invalid length");
             }
             double[,] ret = new double[m, n];
-            // BlockCopy uses byte lengths: a double is 8 bytes
             Buffer.BlockCopy(flat, 0, ret, 0, flat.Length * sizeof(double));
             return ret;
         }
@@ -111,9 +110,14 @@ namespace WpfApp1
             return arr3;
         }
 
-        private static int Adding(double[] a, double b, double[] c)
+        private static int Multiply(double[] a, double b, double[] c)
         {
-            return MasmConnector.Adding(a, b, c);
+            return MasmConnector.Multiply(a, b, c);
+        }
+
+        private static int Blur(int a, int b, int c)
+        {
+            return MasmConnector.Blur(a, b, c);
         }
 
         public static double[,] GaussianBlur(int length, int weight, Boolean masm)
@@ -155,7 +159,7 @@ namespace WpfApp1
                     for (int i = 0; i < length*length/16; i++)
                     {
                         double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
-                        Adding(temp, B, kernel5);
+                        Multiply(temp, B, kernel5);
                         kernel3 = ConnectArrays(kernel3, kernel5);
                     }
                     double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
@@ -251,19 +255,22 @@ namespace WpfApp1
         {
 
             //double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-            double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
-            double[] kernel3 = new double[0];
-            double[] kernel4 = new double[16];
-            double B = 4;
-            for (int i = 0; i < 4; i++)
-            {
-                double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
-                Adding(temp, B, kernel4);
-                kernel3 = ConnectArrays(kernel3, kernel4);
-            }
+            //double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
+            //double[] kernel3 = new double[0];
+            //double[] kernel4 = new double[16];
+            //double B = 4;
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
+            //    Multiply(temp, B, kernel4);
+            //    kernel3 = ConnectArrays(kernel3, kernel4);
+            //}
+            int a = 5;
+            int b = 3;
+            int c = 7;
 
-
-            text1.Content = 5;
+            int temp = Blur(a, b, c);
+            text1.Content = temp;
         }
     }
 

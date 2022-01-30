@@ -10,6 +10,9 @@ namespace WpfApp1
     public class MasmConnector
     {
         [DllImport("../../../x64/Debug/asembler.dll")]
-        public static extern int Adding(double[] a, double b, double[] c);
+        public static extern int Multiply(double[] a, double b, double[] c);
+
+        [DllImport("../../../x64/Debug/asembler2.dll")]
+        public static extern int Blur(int a, int b, int c);
     }
 }

@@ -1,7 +1,7 @@
 .CODE 
 
 
-Adding proc x: PTR REAL8, y: REAL8, z: PTR REAL8
+Multiply proc x: PTR REAL8, y: REAL8, z: PTR REAL8
 
 
         VBROADCASTSD YMM0, XMM1
@@ -18,5 +18,6 @@ Adding proc x: PTR REAL8, y: REAL8, z: PTR REAL8
 
 RET
 
-Adding endp 
+Multiply endp 
+
 END 
