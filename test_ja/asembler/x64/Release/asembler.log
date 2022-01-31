@@ -1,0 +1,10 @@
+﻿  Assembling MASM.asm...
+MASM.asm(21): warning A6004: procedure argument or local not referenced : x
+MASM.asm(21): warning A6004: procedure argument or local not referenced : y
+MASM.asm(21): warning A6004: procedure argument or local not referenced : z
+LINK : warning LNK4216: Wyeksportowano punkt wejścia Multiply
+     Trwa tworzenie biblioteki C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.lib i obiektu C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.exp
+asembler.exp : warning LNK4070: /OUT: dyrektywa asembler.dll w pliku .EXP jest inna niż nazwa pliku wyjściowego „C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.exe”; dyrektywa została zignorowana
+  LINK : określono opcję /LTCG, lecz generowanie kodu nie było wymagane; usuń opcję /LTCG z wiersza polecenia konsolidatora w celu podwyższenia wydajności konsolidatora
+asembler.exp : warning LNK4070: /OUT: dyrektywa asembler.dll w pliku .EXP jest inna niż nazwa pliku wyjściowego „C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.exe”; dyrektywa została zignorowana
+  asembler.vcxproj -> C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.exe

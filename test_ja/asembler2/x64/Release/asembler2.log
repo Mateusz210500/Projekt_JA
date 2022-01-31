@@ -1,0 +1,4 @@
+﻿  Assembling MASM2.asm...
+     Trwa tworzenie biblioteki C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler2.lib i obiektu C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler2.exp
+  LINK : określono opcję /LTCG, lecz generowanie kodu nie było wymagane; usuń opcję /LTCG z wiersza polecenia konsolidatora w celu podwyższenia wydajności konsolidatora
+  asembler2.vcxproj -> C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler2.dll

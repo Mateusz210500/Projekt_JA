@@ -9,10 +9,10 @@ namespace WpfApp1
 {
     public class MasmConnector
     {
-        [DllImport("../../../x64/Debug/asembler.dll")]
+        [DllImport("../../../x64/Release/asembler.dll")]
         public static extern int Multiply(double[] a, double b, double[] c);
 
-        [DllImport("../../../x64/Debug/asembler2.dll")]
+        [DllImport("../../../x64/Release/asembler2.dll")]
         public static extern int Blur(int a, int b, int c);
     }
 }

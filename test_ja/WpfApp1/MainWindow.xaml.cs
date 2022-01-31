@@ -26,12 +26,14 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+        private int blurLength = 0;
+        private Boolean masmOn = false;
+        private long TimeInTicks = 0;
+
         public MainWindow()
         {
             InitializeComponent();
         }
-        private int blurLength = 0;
-        private Boolean masmOn = false;
 
         BitmapImage bitmapImage;
         private void BtnLoadFromFile_Click(object sender, RoutedEventArgs e)
@@ -120,8 +122,9 @@ namespace WpfApp1
             return MasmConnector.Blur(a, b, c);
         }
 
-        public static double[,] GaussianBlur(int length, int weight, Boolean masm)
+        public static double[,] GaussianBlur(int length, int weight, Boolean masm, ref long resultTime)
         {
+            var timer = new Stopwatch();
             length = length * 4;
             double[,] kernel = new double[length, length];
             double kernelSum = 0;
@@ -132,42 +135,52 @@ namespace WpfApp1
             {
                 for (int x = -foff; x <= foff; x++)
                 {
-                    //distance = ((y * y) + (x * x)) / (2 * weight * weight);
-                    int temp = Blur(y, x, weight);
-                    distance = (double)temp / 100;
+                    if (masm) {
+                        timer.Start();
+                        int temp = Blur(y, x, weight);
+                        distance = (double)temp / 100;
+                        timer.Stop();
+                    }
+                    else {
+                        timer.Start();
+                        int temp = ((y * y) + (x * x)) * 100 / (2 * weight * weight);
+                        distance = (double)temp / 100;
+                        timer.Stop();
+                    }
                     kernel[y + foff, x + foff] = constant * Math.Exp(-distance);
                     kernelSum += kernel[y + foff, x + foff];
                 }
             }
-            switch (masm)
-            {
-                case false:
-                    for (int y = 0; y < length; y++)
+            double[] kernel2 = MatrixToArray(kernel);
+            double[] kernel3 = new double[0];
+            double[] kernel5 = new double[16];
+            double B = 1d / kernelSum;
+            if (!masm) {
+                //timer.Start();
+                for (int y = 0; y < length; y++)
+                {
+                    for (int x = 0; x < length; x++)
                     {
-                        for (int x = 0; x < length; x++)
-                        {
-                            kernel[y, x] = kernel[y, x] * 1d / kernelSum;
-                        }
+                        kernel[y, x] = kernel[y, x] * B;
                     }
-                    Console.WriteLine("c#");
-                    return kernel;
-                break;
-
-                default:
-                    double[] kernel2 = MatrixToArray(kernel);
-                    double[] kernel3 = new double[0];
-                    double[] kernel5 = new double[16];
-                    double B = 1d / kernelSum;
-                    for (int i = 0; i < length*length/16; i++)
-                    {
-                        double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
-                        Multiply(temp, B, kernel5);
-                        kernel3 = ConnectArrays(kernel3, kernel5);
-                    }
-                    double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
-                    Console.WriteLine("masm");
-                    return kernel4;
-                break;
+                }
+                //timer.Stop();
+                resultTime = timer.ElapsedTicks;
+                Console.WriteLine("c#");
+                return kernel;
+            }else {
+                //timer.Start();
+                for (int i = 0; i < length*length/16; i++)
+                {
+                    double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
+                    Multiply(temp, B, kernel5);
+                    kernel3 = ConnectArrays(kernel3, kernel5);
+                }
+                //timer.Stop();
+                resultTime = timer.ElapsedTicks;
+                double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
+                Console.WriteLine("masm");
+                return kernel4;
             }
         }
 
@@ -237,9 +250,10 @@ namespace WpfApp1
         {
             Bitmap bitmap;
             bitmap = BitmapImagetoBitmap(bitmapImage);
-            double[,] kernel = GaussianBlur(blurLength, 10, masmOn);
+            double[,] kernel = GaussianBlur(blurLength, 10, masmOn,ref TimeInTicks);
             bitmap = Convolve(bitmap, kernel);
             BitmapImage bitmap2 = BitmapToBitmapImage(bitmap);
+            text1.Content = TimeInTicks;
             imgDynamic2.Source = bitmap2;
         }
 
@@ -252,31 +266,7 @@ namespace WpfApp1
         {
             masmOn = masmClick.IsChecked == true;
         }
-
-        private void BtnMASM_Click(object sender, RoutedEventArgs e)
-        {
-
-            //double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-            //double[] kernel2 = new double[64] { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4 };
-            //double[] kernel3 = new double[0];
-            //double[] kernel4 = new double[16];
-            //double B = 4;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
-            //    Multiply(temp, B, kernel4);
-            //    kernel3 = ConnectArrays(kernel3, kernel4);
-            //}
-            int a = 5;
-            int b = 5;
-            int c = 16;
-
-            int temp = Blur(a, b, c);
-            double ret = (double)temp / 100;
-            text1.Content = ret;
-        }
     }
-
 }
 
         

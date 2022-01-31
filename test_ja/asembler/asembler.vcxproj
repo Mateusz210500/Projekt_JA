@@ -139,6 +139,9 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>MASM.def</ModuleDefinitionFile>
+      <NoEntryPoint>false</NoEntryPoint>
+      <EntryPointSymbol>Multiply</EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

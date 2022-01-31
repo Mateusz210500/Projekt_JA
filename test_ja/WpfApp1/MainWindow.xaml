@@ -21,7 +21,6 @@
         </WrapPanel>
         <WrapPanel HorizontalAlignment="Center">
             <Button x:Name="btnApplyFilter" Click="BtnApplyFilter_Click" HorizontalAlignment="Center" VerticalAlignment="bottom" RenderTransformOrigin="0.5,1.4" Margin="365,0,354,0" Width="75" Content="Apply Filter"/>
-            <Button x:Name="btnApplyFilter_Copy" Click="BtnMASM_Click" HorizontalAlignment="Center" VerticalAlignment="bottom" RenderTransformOrigin="0.5,1.4" Margin="365,10,354,0" Width="75" Content="MASM"/>
         </WrapPanel>
         <Label x:Name="text1" Content="wynik"  HorizontalAlignment="Center" Margin="10" VerticalAlignment="Center"/>
     </StackPanel>
