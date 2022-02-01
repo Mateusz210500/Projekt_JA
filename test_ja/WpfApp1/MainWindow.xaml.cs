@@ -24,6 +24,7 @@ namespace WpfApp1
     /// <summary>
     /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
+
     public partial class MainWindow : Window
     {
         private static int threadsNumber = Environment.ProcessorCount;
@@ -141,32 +142,35 @@ namespace WpfApp1
             double constant = 1d / (2 * Math.PI * weight * weight);
             for (int y = -foff; y <= foff; y++)
             {
-                for (int x = -foff; x <= foff; x++)
+
+                Parallel.For(-foff, foff + 1, parallelOptions, x =>
                 {
-                    if (masm) {
-                            timer.Start();
-                            int temp = Blur(y, x, weight);
-                            distance = (double)temp / 100;
-                            timer.Stop();
+                    //    for (int x = -foff; x <= foff; x++)
+                    //{
+                    if (masm)
+                    {
+                        timer.Start();
+                        int temp = Blur(y, x, weight);
+                        distance = (double)temp / 100;
+                        timer.Stop();
                     }
-                    else {
-                            timer.Start();
-                            int temp = ((y * y) + (x * x)) * 100 / (2 * weight * weight);
-                            distance = (double)temp / 100;
-                            timer.Stop();
+                    else
+                    {
+                        timer.Start();
+                        int temp = ((y * y) + (x * x)) * 100 / (2 * weight * weight);
+                        distance = (double)temp / 100;
+                        timer.Stop();
                     }
                     kernel[y + foff, x + foff] = constant * Math.Exp(-distance);
                     kernelSum += kernel[y + foff, x + foff];
-                }
+                });
             }
             double[] kernel2 = MatrixToArray(kernel);
             double[] kernel3 = new double[0];
             double[] kernel5 = new double[16];
             double B = 1d / kernelSum;
+            int forIter = length * length / 16;
             if (!masm) {
-
-                Parallel.For(0, threadsNumber, parallelOptions, i =>
-                {
                     timer.Start();
                     for (int y = 0; y < length; y++)
                     {
@@ -174,25 +178,20 @@ namespace WpfApp1
                         {
                             kernel[y, x] = kernel[y, x] * B;
                         }
-                    }
-                    timer.Stop();
-                });
+                }
+                timer.Stop();
                 resultTime = timer.ElapsedTicks;
                 Console.WriteLine("c#");
                 return kernel;
             }else {
-
-                Parallel.For(0, threadsNumber, parallelOptions, j =>
-                {
                     timer.Start();
-                    for (int i = 0; i < length*length/16; i++)
-                    {
-                        double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
+                for (int i = 0; i < length*length/16; i++)
+                {
+                    double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
                         Multiply(temp, B, kernel5);
                         kernel3 = ConnectArrays(kernel3, kernel5);
-                    }
-                    timer.Stop();
-                });
+            }
+            timer.Stop();
                 resultTime = timer.ElapsedTicks;
                 double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
                 Console.WriteLine("masm");
