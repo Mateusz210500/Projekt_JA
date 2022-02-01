@@ -26,14 +26,21 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static int threadsNumber = Environment.ProcessorCount;
+
+
+
         private int blurLength = 0;
-        private int threadsNumber = 1;
+        static ParallelOptions parallelOptions = new ParallelOptions { MaxDegreeOfParallelism = 12 };
         private Boolean masmOn = false;
         private long TimeInTicks = 0;
 
         public MainWindow()
         {
+
             InitializeComponent();
+            threadsNumber = Environment.ProcessorCount;
+            threadValue.Value = threadsNumber;
         }
 
         BitmapImage bitmapImage;
@@ -41,7 +48,7 @@ namespace WpfApp1
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Images (*.BMP;*.JPG;*.GIF,*.PNG,*.TIFF)|*.BMP;*.JPG;*.GIF;*.PNG;*.TIFF|" + "All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK && openFileDialog.CheckFileExists)
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 Uri fileUri = new Uri(openFileDialog.FileName);
                 imgDynamic.Source = new BitmapImage(fileUri);
@@ -137,16 +144,16 @@ namespace WpfApp1
                 for (int x = -foff; x <= foff; x++)
                 {
                     if (masm) {
-                        timer.Start();
-                        int temp = Blur(y, x, weight);
-                        distance = (double)temp / 100;
-                        timer.Stop();
+                            timer.Start();
+                            int temp = Blur(y, x, weight);
+                            distance = (double)temp / 100;
+                            timer.Stop();
                     }
                     else {
-                        timer.Start();
-                        int temp = ((y * y) + (x * x)) * 100 / (2 * weight * weight);
-                        distance = (double)temp / 100;
-                        timer.Stop();
+                            timer.Start();
+                            int temp = ((y * y) + (x * x)) * 100 / (2 * weight * weight);
+                            distance = (double)temp / 100;
+                            timer.Stop();
                     }
                     kernel[y + foff, x + foff] = constant * Math.Exp(-distance);
                     kernelSum += kernel[y + foff, x + foff];
@@ -157,27 +164,35 @@ namespace WpfApp1
             double[] kernel5 = new double[16];
             double B = 1d / kernelSum;
             if (!masm) {
-                timer.Start();
-                for (int y = 0; y < length; y++)
+
+                Parallel.For(0, threadsNumber, parallelOptions, i =>
                 {
-                    for (int x = 0; x < length; x++)
+                    timer.Start();
+                    for (int y = 0; y < length; y++)
                     {
-                        kernel[y, x] = kernel[y, x] * B;
+                        for (int x = 0; x < length; x++)
+                        {
+                            kernel[y, x] = kernel[y, x] * B;
+                        }
                     }
-                }
-                timer.Stop();
+                    timer.Stop();
+                });
                 resultTime = timer.ElapsedTicks;
                 Console.WriteLine("c#");
                 return kernel;
             }else {
-                timer.Start();
-                for (int i = 0; i < length*length/16; i++)
+
+                Parallel.For(0, threadsNumber, parallelOptions, j =>
                 {
-                    double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
-                    Multiply(temp, B, kernel5);
-                    kernel3 = ConnectArrays(kernel3, kernel5);
-                }
-                timer.Stop();
+                    timer.Start();
+                    for (int i = 0; i < length*length/16; i++)
+                    {
+                        double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
+                        Multiply(temp, B, kernel5);
+                        kernel3 = ConnectArrays(kernel3, kernel5);
+                    }
+                    timer.Stop();
+                });
                 resultTime = timer.ElapsedTicks;
                 double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
                 Console.WriteLine("masm");

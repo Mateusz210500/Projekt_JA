@@ -12,3 +12,4 @@ C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\W
 C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\WpfApp1.csproj.CoreCompileInputs.cache
 C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\WpfApp1.exe
 C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\WpfApp1.pdb
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\WpfApp1.csproj.AssemblyReference.cache
