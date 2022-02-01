@@ -4,15 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using System.Runtime.ExceptionServices;
+using System.Security;
 
 namespace WpfApp1
 {
     public class MasmConnector
     {
-        [DllImport("../../../x64/Release/asembler.dll")]
+        
+        [DllImport(@"C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Debug\asembler.dll")]
+        [HandleProcessCorruptedStateExceptions]
+        [SecurityCritical]
         public static extern int Multiply(double[] a, double b, double[] c);
 
-        [DllImport("../../../x64/Release/asembler2.dll")]
+        
+        [DllImport(@"C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Debug\asembler2.dll")]
+        [HandleProcessCorruptedStateExceptions]
+        [SecurityCritical]
         public static extern int Blur(int a, int b, int c);
     }
 }

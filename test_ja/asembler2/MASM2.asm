@@ -4,6 +4,7 @@ divisor  DWORD ?
 .CODE 
 
 Blur proc
+
 imul ecx, ecx
 mov dividend, ecx
 mov eax, 0
@@ -25,5 +26,6 @@ mov ecx, divisor
 div ecx
 
 ret
+
 Blur endp 
 END 

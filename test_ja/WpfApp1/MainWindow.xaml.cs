@@ -27,6 +27,7 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         private int blurLength = 0;
+        private int threadsNumber = 1;
         private Boolean masmOn = false;
         private long TimeInTicks = 0;
 
@@ -40,7 +41,7 @@ namespace WpfApp1
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Images (*.BMP;*.JPG;*.GIF,*.PNG,*.TIFF)|*.BMP;*.JPG;*.GIF;*.PNG;*.TIFF|" + "All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK && openFileDialog.CheckFileExists)
             {
                 Uri fileUri = new Uri(openFileDialog.FileName);
                 imgDynamic.Source = new BitmapImage(fileUri);
@@ -156,7 +157,7 @@ namespace WpfApp1
             double[] kernel5 = new double[16];
             double B = 1d / kernelSum;
             if (!masm) {
-                //timer.Start();
+                timer.Start();
                 for (int y = 0; y < length; y++)
                 {
                     for (int x = 0; x < length; x++)
@@ -164,19 +165,19 @@ namespace WpfApp1
                         kernel[y, x] = kernel[y, x] * B;
                     }
                 }
-                //timer.Stop();
+                timer.Stop();
                 resultTime = timer.ElapsedTicks;
                 Console.WriteLine("c#");
                 return kernel;
             }else {
-                //timer.Start();
+                timer.Start();
                 for (int i = 0; i < length*length/16; i++)
                 {
                     double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
                     Multiply(temp, B, kernel5);
                     kernel3 = ConnectArrays(kernel3, kernel5);
                 }
-                //timer.Stop();
+                timer.Stop();
                 resultTime = timer.ElapsedTicks;
                 double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
                 Console.WriteLine("masm");
@@ -260,6 +261,11 @@ namespace WpfApp1
         private void ColorSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 		{
             blurLength = (int)slValue.Value;
+        }
+
+        private void ThreadSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            threadsNumber = (int)threadValue.Value;
         }
 
         private void masmOnChange(object sender, RoutedEventArgs e)

@@ -3,6 +3,8 @@
 
 Multiply proc x: PTR REAL8, y: REAL8, z: PTR REAL8
 
+push RCX
+push R8
 
         VBROADCASTSD YMM0, XMM1
         VMULPD  YMM1, YMM0, YMMWORD PTR [RCX]
@@ -15,8 +17,10 @@ Multiply proc x: PTR REAL8, y: REAL8, z: PTR REAL8
         VMOVUPD YMMWORD PTR [R8 + 96], YMM0
         vzeroupper
 
-
 RET
+
+pop RCX
+pop R8
 
 Multiply endp 
 
