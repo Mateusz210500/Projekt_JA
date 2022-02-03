@@ -89,116 +89,6 @@ namespace WpfApp1
             
         }
 
-        private static double[] MatrixToArray(double[,] prop)
-        {
-            double[] result = new double[prop.Length];
-            int index = 0;
-
-            for (var i = 0; i <= prop.GetUpperBound(0); i++)
-            {
-                for (var j = 0; j <= prop.GetUpperBound(1); j++)
-                    result[index++] = prop[i, j];
-            }
-
-            return result;
-        }
-        private static double[,] ArrayToMatrix(double[] flat, int m, int n)
-        {
-            if (flat.Length != m * n)
-            {
-                throw new ArgumentException("Invalid length");
-            }
-            double[,] ret = new double[m, n];
-            Buffer.BlockCopy(flat, 0, ret, 0, flat.Length * sizeof(double));
-            return ret;
-        }
-
-        private static double[] ConnectArrays(double[] first, double[] second)
-        {
-            double[] arr3 = new double[first.Length + second.Length];
-            Array.Copy(first, arr3, first.Length);
-            Array.Copy(second, 0, arr3, first.Length, second.Length);
-            return arr3;
-        }
-
-        private static int Multiply(double[] a, double b, double[] c)
-        {
-            return MasmConnector.Multiply(a, b, c);
-        }
-
-        private static int Blur(int a, int b, int c)
-        {
-            return MasmConnector.Blur(a, b, c);
-        }
-
-        public static double[,] GaussianBlur(int length, int weight, Boolean masm, ref long resultTime)
-        {
-            var timer = new Stopwatch();
-            length = length * 4;
-            double[,] kernel = new double[length, length];
-            double kernelSum = 0;
-            int foff = (length - 1) / 2;
-            double distance = 0;
-            double constant = 1d / (2 * Math.PI * weight * weight);
-            for (int y = -foff; y <= foff; y++)
-            {
-
-                Parallel.For(-foff, foff + 1, parallelOptions, x =>
-                {
-                    //    for (int x = -foff; x <= foff; x++)
-                    //{
-                    if (masm)
-                    {
-                        timer.Start();
-                        int temp = Blur(y, x, weight);
-                        distance = (double)temp / 100;
-                        timer.Stop();
-                    }
-                    else
-                    {
-                        timer.Start();
-                        int temp = ((y * y) + (x * x)) * 100 / (2 * weight * weight);
-                        distance = (double)temp / 100;
-                        timer.Stop();
-                    }
-                    kernel[y + foff, x + foff] = constant * Math.Exp(-distance);
-                    kernelSum += kernel[y + foff, x + foff];
-                });
-            }
-            double[] kernel2 = MatrixToArray(kernel);
-            double[] kernel3 = new double[0];
-            double[] kernel5 = new double[16];
-            double B = 1d / kernelSum;
-            int forIter = length * length / 16;
-            if (!masm) {
-                    timer.Start();
-                    for (int y = 0; y < length; y++)
-                    {
-                        for (int x = 0; x < length; x++)
-                        {
-                            kernel[y, x] = kernel[y, x] * B;
-                        }
-                }
-                timer.Stop();
-                resultTime = timer.ElapsedTicks;
-                Console.WriteLine("c#");
-                return kernel;
-            }else {
-                    timer.Start();
-                for (int i = 0; i < length*length/16; i++)
-                {
-                    double[] temp = kernel2.Skip(i * 16).Take(16).ToArray();
-                        Multiply(temp, B, kernel5);
-                        kernel3 = ConnectArrays(kernel3, kernel5);
-            }
-            timer.Stop();
-                resultTime = timer.ElapsedTicks;
-                double[,] kernel4 = ArrayToMatrix(kernel3, length, length);
-                Console.WriteLine("masm");
-                return kernel4;
-            }
-        }
-
         public static Bitmap Convolve(Bitmap srcImage, double[,] kernel)
         {
             int width = srcImage.Width;
@@ -265,7 +155,7 @@ namespace WpfApp1
         {
             Bitmap bitmap;
             bitmap = BitmapImagetoBitmap(bitmapImage);
-            double[,] kernel = GaussianBlur(blurLength, 10, masmOn,ref TimeInTicks);
+            double[,] kernel = ConsoleApp1.Program.GaussianBlur(blurLength, 10, masmOn,ref TimeInTicks, parallelOptions);
             bitmap = Convolve(bitmap, kernel);
             BitmapImage bitmap2 = BitmapToBitmapImage(bitmap);
             text1.Content = TimeInTicks;

@@ -13,3 +13,7 @@ C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\W
 C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\WpfApp1.exe
 C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\WpfApp1.pdb
 C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\WpfApp1.csproj.AssemblyReference.cache
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\bin\x64\Release\ConsoleApp1.dll
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\bin\x64\Release\ConsoleApp1.pdb
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\bin\x64\Release\ConsoleApp1.dll.config
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\WpfApp1\obj\x64\Release\WpfApp1.csproj.CopyComplete

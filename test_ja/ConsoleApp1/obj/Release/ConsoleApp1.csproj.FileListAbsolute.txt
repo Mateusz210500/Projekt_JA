@@ -1,0 +1,6 @@
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\ConsoleApp1\obj\Release\ConsoleApp1.csproj.CoreCompileInputs.cache
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\ConsoleApp1\bin\Release\ConsoleApp1.dll.config
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\ConsoleApp1\bin\Release\ConsoleApp1.dll
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\ConsoleApp1\bin\Release\ConsoleApp1.pdb
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\ConsoleApp1\obj\Release\ConsoleApp1.dll
+C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\ConsoleApp1\obj\Release\ConsoleApp1.pdb

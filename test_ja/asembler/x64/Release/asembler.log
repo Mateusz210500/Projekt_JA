@@ -1,7 +1,1 @@
-﻿  Assembling MASM.asm...
-MASM.asm(25): warning A6004: procedure argument or local not referenced : x
-MASM.asm(25): warning A6004: procedure argument or local not referenced : y
-MASM.asm(25): warning A6004: procedure argument or local not referenced : z
-     Trwa tworzenie biblioteki C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.lib i obiektu C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.exp
-  LINK : określono opcję /LTCG, lecz generowanie kodu nie było wymagane; usuń opcję /LTCG z wiersza polecenia konsolidatora w celu podwyższenia wydajności konsolidatora
-  asembler.vcxproj -> C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.dll
+﻿  asembler.vcxproj -> C:\Users\mateu\source\repos\Studies\Projekt_JA\test_ja\x64\Release\asembler.dll
